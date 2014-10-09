@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/PepijnSenders/angular-i18n/issues"
   },
-  "homepage": "https://github.com/PepijnSenders/angular-i18n"
+  "homepage": "https://github.com/PepijnSenders/angular-i18n",
+  "dependencies": {
+    "angular": "^1.2.23"
+  }
 }
