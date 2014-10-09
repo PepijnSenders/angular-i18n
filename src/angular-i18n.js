@@ -1,37 +1,42 @@
 var angularI18n = angular.module('I18nModule', []);
 
-angularI18n.provider('i18nService', function() {
+angularI18n.provider('intService', function() {
 
   this.setSource = function(source) {
     this.source = source;
   };
 
-  this.$get = function() {
+  this.$get = ['$log', function($log) {
     var self = this;
 
     return {
-      getSource: getSource
+      getSource: getSource,
+      translate: translate
+    };
+
+    function translate(name) {
+      var splitted = name.split('.');
+
+      var namespace = splitted.shift(), key = splitted.join('.');
+
+      try {
+        return self.source[namespace][key];
+      } catch(error) {
+        $log.error(namespace + '.' + key + ' doesn\'t exist in sourcefile.');
+      }
     };
 
     function getSource() {
       return self.source;
     };
-  };
+  }];
 
 });
 
-angularI18n.directive('i18nTranslate', function(i18nService) {
+angularI18n.directive('intTranslate', function(intService) {
 
   return function(scope, element, attrs) {
-    var splitted = attrs.i18nTranslate.split('.');
-
-    var namespace = splitted.shift(), key = splitted.join('.');
-
-    try {
-      element.html(i18nService.getSource()[namespace][key]);
-    } catch(error) {
-      console.error(namespace + '.' + key + ' doesn\'t exist in sourcefile.');
-    }
+    element.html(intService.translate(attrs.intTranslate));
   };
 
 });
