@@ -14,13 +14,17 @@ angularI18n.provider('intService', function() {
       translate: translate
     };
 
-    function translate(name) {
+    function translate(name, attribute) {
       var splitted = name.split('.');
 
       var namespace = splitted.shift(), key = splitted.join('.');
 
       try {
-        return self.source[namespace][key];
+        var content = self.source[namespace][key];
+        if (attribute) {
+          content = content.replace(':attribute', attribute);
+        }
+        return content;
       } catch(error) {
         $log.error(namespace + '.' + key + ' doesn\'t exist in sourcefile.');
       }
